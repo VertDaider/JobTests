@@ -1,0 +1,20 @@
+CREATE DATABASE IF NOT EXISTS duelgame;
+use duelgame;
+grant all on duelgame.* to 'test_game'@'localhost' identified by 'pghjcnjgfcc';
+
+CREATE TABLE `users` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`name` varchar(45) NOT NULL,
+	`password` varchar(45) NOT NULL,
+	`hp` int DEFAULT 100,
+	`attack` int DEFAULT 10,
+	`rating` int DEFAULT 0,
+	PRIMARY KEY (`id`)
+) CHARSET=utf8;
+
+INSERT INTO
+   users(name, password)
+VALUES
+   ("Legolas", "derparol"),
+   ("Frodo", "12345"),
+   ("Saruman", "qwerty");

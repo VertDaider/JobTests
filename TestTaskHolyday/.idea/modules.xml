@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/EcoSystem/EcoSystem.iml" filepath="$PROJECT_DIR$/EcoSystem/EcoSystem.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TestTaskHolyday.iml" filepath="$PROJECT_DIR$/TestTaskHolyday.iml" />
+    </modules>
+  </component>
+</project>

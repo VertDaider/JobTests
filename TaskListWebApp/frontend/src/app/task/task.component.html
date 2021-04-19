@@ -1,0 +1,23 @@
+<div class="container">
+  <h2>Список задач</h2>
+  <h3>Добавить задачу
+  <a [routerLink]="['/task-create']" class="btn btn-default btn-lg">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+  </a>
+  </h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Задание</th>
+        <th>Дата</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of tasks">
+        <td>{{ task.text }}</td>
+        <td>{{ task.date }}</td>
+        <td><a [routerLink]="['/task-detail', task.id]">Редактировать</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

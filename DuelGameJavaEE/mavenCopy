@@ -1,0 +1,3 @@
+cd ~/IdeaProjects/DuelsGameSky/
+mvn clean install
+sudo cp ./target/duelgame.war /var/lib/tomcat9/webapps/

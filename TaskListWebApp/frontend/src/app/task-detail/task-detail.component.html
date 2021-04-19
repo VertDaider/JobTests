@@ -1,0 +1,13 @@
+<div class="container">
+  <h3>{{ task.text }}</h3>
+  <dl class="list">
+    <dt>Дата</dt>
+    <dd>{{ task.date }}</dd>
+  </dl>
+  <div class="row">
+  	<div class="col-md-12">
+    	<a [routerLink]="['/task-edit', task.id]" class="btn btn-success">Изменить</a>
+    	<button class="btn btn-danger" type="button" (click)="deleteTask(task.id)">Удалить</button>
+  	</div>
+  </div>	
+</div>
