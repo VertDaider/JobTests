@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.3.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_3_0.dtd">
+
+<service-builder dependency-injector="ds" package-path="company">
+	<author>sam</author>
+	<namespace>Company</namespace>
+	<entity local-service="true" name="Bank" remote-service="true" uuid="true">
+
+		<!-- PK fields -->
+
+		<column name="bankId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="bankName" type="String" />
+		<column name="BIK" type="long" />
+		<column name="address" type="String" />
+
+		<!-- Order -->
+
+		<order by="asc">
+			<order-column name="bankName" />
+		</order>
+
+		<!-- Finder methods -->
+
+		<finder name="bankName" return-type="Collection">
+			<finder-column name="bankName" />
+		</finder>
+
+	</entity>
+
+	<entity local-service="true" name="Position" remote-service="true" uuid="true">
+
+		<column name="positionId" primary="true" type="long" />
+
+		<column name="name" type="String" />
+		<column name="archive" type="boolean" />
+
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="name" />
+		</order>
+
+		<!-- Finder methods -->
+		<finder name="name" return-type="Collection">
+			<finder-column name="name" />
+		</finder>
+
+	</entity>
+
+	<entity local-service="true" name="Employee" remote-service="true" uuid="true">
+
+		<column name="employeesId" primary="true" type="long" />
+
+		<column name="surname" type="String" />
+		<column name="name" type="String" />
+		<column name="patronymic" type="String" />
+		<column name="sex" type="String" />
+		<column name="birthDay" type="Date" />
+		<column name="position" type="int" />
+		<column name="dateOfEmployment" type="Date" />
+		<column name="salary" type="int" />
+		<column name="mobilePhone" type="int" />
+		<column name="jobPhone" type="int" />
+		<column name="bank" type="int" />
+		<column name="archive" type="boolean" />
+
+		<order by="asc">
+			<order-column name="surname" />
+		</order>
+
+	</entity>
+
+</service-builder>
