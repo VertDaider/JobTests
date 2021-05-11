@@ -52,13 +52,6 @@ public class BankLocalServiceUtil {
 		return getService().addBank(bank);
 	}
 
-	public static company.model.Bank addBank(
-			String name, long bik, String address)
-		throws com.liferay.portal.kernel.exception.SystemException {
-
-		return getService().addBank(name, bik, address);
-	}
-
 	/**
 	 * Creates a new bank with the primary key. Does not add the bank to the database.
 	 *
@@ -214,10 +207,6 @@ public class BankLocalServiceUtil {
 		getActionableDynamicQuery() {
 
 		return getService().getActionableDynamicQuery();
-	}
-
-	public static java.util.List getAllBanks() {
-		return getService().getAllBanks();
 	}
 
 	/**

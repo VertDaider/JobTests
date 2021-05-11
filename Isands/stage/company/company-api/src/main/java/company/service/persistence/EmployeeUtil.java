@@ -286,6 +286,335 @@ public class EmployeeUtil {
 	}
 
 	/**
+	 * Returns all the employees where position = &#63;.
+	 *
+	 * @param position the position
+	 * @return the matching employees
+	 */
+	public static List<Employee> findByPosition(int position) {
+		return getPersistence().findByPosition(position);
+	}
+
+	/**
+	 * Returns a range of all the employees where position = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param position the position
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @return the range of matching employees
+	 */
+	public static List<Employee> findByPosition(
+		int position, int start, int end) {
+
+		return getPersistence().findByPosition(position, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the employees where position = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param position the position
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching employees
+	 */
+	public static List<Employee> findByPosition(
+		int position, int start, int end,
+		OrderByComparator<Employee> orderByComparator) {
+
+		return getPersistence().findByPosition(
+			position, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the employees where position = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param position the position
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching employees
+	 */
+	public static List<Employee> findByPosition(
+		int position, int start, int end,
+		OrderByComparator<Employee> orderByComparator, boolean useFinderCache) {
+
+		return getPersistence().findByPosition(
+			position, start, end, orderByComparator, useFinderCache);
+	}
+
+	/**
+	 * Returns the first employee in the ordered set where position = &#63;.
+	 *
+	 * @param position the position
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee
+	 * @throws NoSuchEmployeeException if a matching employee could not be found
+	 */
+	public static Employee findByPosition_First(
+			int position, OrderByComparator<Employee> orderByComparator)
+		throws company.exception.NoSuchEmployeeException {
+
+		return getPersistence().findByPosition_First(
+			position, orderByComparator);
+	}
+
+	/**
+	 * Returns the first employee in the ordered set where position = &#63;.
+	 *
+	 * @param position the position
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	public static Employee fetchByPosition_First(
+		int position, OrderByComparator<Employee> orderByComparator) {
+
+		return getPersistence().fetchByPosition_First(
+			position, orderByComparator);
+	}
+
+	/**
+	 * Returns the last employee in the ordered set where position = &#63;.
+	 *
+	 * @param position the position
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee
+	 * @throws NoSuchEmployeeException if a matching employee could not be found
+	 */
+	public static Employee findByPosition_Last(
+			int position, OrderByComparator<Employee> orderByComparator)
+		throws company.exception.NoSuchEmployeeException {
+
+		return getPersistence().findByPosition_Last(
+			position, orderByComparator);
+	}
+
+	/**
+	 * Returns the last employee in the ordered set where position = &#63;.
+	 *
+	 * @param position the position
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	public static Employee fetchByPosition_Last(
+		int position, OrderByComparator<Employee> orderByComparator) {
+
+		return getPersistence().fetchByPosition_Last(
+			position, orderByComparator);
+	}
+
+	/**
+	 * Returns the employees before and after the current employee in the ordered set where position = &#63;.
+	 *
+	 * @param employeesId the primary key of the current employee
+	 * @param position the position
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next employee
+	 * @throws NoSuchEmployeeException if a employee with the primary key could not be found
+	 */
+	public static Employee[] findByPosition_PrevAndNext(
+			long employeesId, int position,
+			OrderByComparator<Employee> orderByComparator)
+		throws company.exception.NoSuchEmployeeException {
+
+		return getPersistence().findByPosition_PrevAndNext(
+			employeesId, position, orderByComparator);
+	}
+
+	/**
+	 * Removes all the employees where position = &#63; from the database.
+	 *
+	 * @param position the position
+	 */
+	public static void removeByPosition(int position) {
+		getPersistence().removeByPosition(position);
+	}
+
+	/**
+	 * Returns the number of employees where position = &#63;.
+	 *
+	 * @param position the position
+	 * @return the number of matching employees
+	 */
+	public static int countByPosition(int position) {
+		return getPersistence().countByPosition(position);
+	}
+
+	/**
+	 * Returns all the employees where bank = &#63;.
+	 *
+	 * @param bank the bank
+	 * @return the matching employees
+	 */
+	public static List<Employee> findByBank(int bank) {
+		return getPersistence().findByBank(bank);
+	}
+
+	/**
+	 * Returns a range of all the employees where bank = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param bank the bank
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @return the range of matching employees
+	 */
+	public static List<Employee> findByBank(int bank, int start, int end) {
+		return getPersistence().findByBank(bank, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the employees where bank = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param bank the bank
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching employees
+	 */
+	public static List<Employee> findByBank(
+		int bank, int start, int end,
+		OrderByComparator<Employee> orderByComparator) {
+
+		return getPersistence().findByBank(bank, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the employees where bank = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param bank the bank
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching employees
+	 */
+	public static List<Employee> findByBank(
+		int bank, int start, int end,
+		OrderByComparator<Employee> orderByComparator, boolean useFinderCache) {
+
+		return getPersistence().findByBank(
+			bank, start, end, orderByComparator, useFinderCache);
+	}
+
+	/**
+	 * Returns the first employee in the ordered set where bank = &#63;.
+	 *
+	 * @param bank the bank
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee
+	 * @throws NoSuchEmployeeException if a matching employee could not be found
+	 */
+	public static Employee findByBank_First(
+			int bank, OrderByComparator<Employee> orderByComparator)
+		throws company.exception.NoSuchEmployeeException {
+
+		return getPersistence().findByBank_First(bank, orderByComparator);
+	}
+
+	/**
+	 * Returns the first employee in the ordered set where bank = &#63;.
+	 *
+	 * @param bank the bank
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	public static Employee fetchByBank_First(
+		int bank, OrderByComparator<Employee> orderByComparator) {
+
+		return getPersistence().fetchByBank_First(bank, orderByComparator);
+	}
+
+	/**
+	 * Returns the last employee in the ordered set where bank = &#63;.
+	 *
+	 * @param bank the bank
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee
+	 * @throws NoSuchEmployeeException if a matching employee could not be found
+	 */
+	public static Employee findByBank_Last(
+			int bank, OrderByComparator<Employee> orderByComparator)
+		throws company.exception.NoSuchEmployeeException {
+
+		return getPersistence().findByBank_Last(bank, orderByComparator);
+	}
+
+	/**
+	 * Returns the last employee in the ordered set where bank = &#63;.
+	 *
+	 * @param bank the bank
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	public static Employee fetchByBank_Last(
+		int bank, OrderByComparator<Employee> orderByComparator) {
+
+		return getPersistence().fetchByBank_Last(bank, orderByComparator);
+	}
+
+	/**
+	 * Returns the employees before and after the current employee in the ordered set where bank = &#63;.
+	 *
+	 * @param employeesId the primary key of the current employee
+	 * @param bank the bank
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next employee
+	 * @throws NoSuchEmployeeException if a employee with the primary key could not be found
+	 */
+	public static Employee[] findByBank_PrevAndNext(
+			long employeesId, int bank,
+			OrderByComparator<Employee> orderByComparator)
+		throws company.exception.NoSuchEmployeeException {
+
+		return getPersistence().findByBank_PrevAndNext(
+			employeesId, bank, orderByComparator);
+	}
+
+	/**
+	 * Removes all the employees where bank = &#63; from the database.
+	 *
+	 * @param bank the bank
+	 */
+	public static void removeByBank(int bank) {
+		getPersistence().removeByBank(bank);
+	}
+
+	/**
+	 * Returns the number of employees where bank = &#63;.
+	 *
+	 * @param bank the bank
+	 * @return the number of matching employees
+	 */
+	public static int countByBank(int bank) {
+		return getPersistence().countByBank(bank);
+	}
+
+	/**
 	 * Caches the employee in the entity cache if it is enabled.
 	 *
 	 * @param employee the employee

@@ -70,6 +70,14 @@
 			<order-column name="surname" />
 		</order>
 
+		<finder name="Position" return-type="Collection">
+			<finder-column name="position" />
+		</finder>
+
+		<finder name="Bank" return-type="Collection">
+			<finder-column name="bank" />
+		</finder>
+
 	</entity>
 
 </service-builder>

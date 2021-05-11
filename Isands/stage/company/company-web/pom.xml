@@ -149,6 +149,7 @@
 					<archive>
 						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
 					</archive>
+					<outputDirectory>C:\liferay-ce-portal-tomcat-7.3.5-ga6-20200930172312275\liferay-ce-portal-7.3.5-ga6\deploy</outputDirectory>
 					<excludes>
 						<exclude>**/META-INF/resources/**/.sass-cache/</exclude>
 					</excludes>

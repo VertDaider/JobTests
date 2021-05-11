@@ -45,13 +45,6 @@ public class BankLocalServiceWrapper
 		return _bankLocalService.addBank(bank);
 	}
 
-	@Override
-	public company.model.Bank addBank(String name, long bik, String address)
-		throws com.liferay.portal.kernel.exception.SystemException {
-
-		return _bankLocalService.addBank(name, bik, address);
-	}
-
 	/**
 	 * Creates a new bank with the primary key. Does not add the bank to the database.
 	 *
@@ -217,11 +210,6 @@ public class BankLocalServiceWrapper
 		getActionableDynamicQuery() {
 
 		return _bankLocalService.getActionableDynamicQuery();
-	}
-
-	@Override
-	public java.util.List getAllBanks() {
-		return _bankLocalService.getAllBanks();
 	}
 
 	/**

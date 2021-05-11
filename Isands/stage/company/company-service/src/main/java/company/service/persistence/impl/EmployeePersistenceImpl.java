@@ -625,6 +625,980 @@ public class EmployeePersistenceImpl
 	private static final String _FINDER_COLUMN_UUID_UUID_3 =
 		"(employee.uuid IS NULL OR employee.uuid = '')";
 
+	private FinderPath _finderPathWithPaginationFindByPosition;
+	private FinderPath _finderPathWithoutPaginationFindByPosition;
+	private FinderPath _finderPathCountByPosition;
+
+	/**
+	 * Returns all the employees where position = &#63;.
+	 *
+	 * @param position the position
+	 * @return the matching employees
+	 */
+	@Override
+	public List<Employee> findByPosition(int position) {
+		return findByPosition(
+			position, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the employees where position = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param position the position
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @return the range of matching employees
+	 */
+	@Override
+	public List<Employee> findByPosition(int position, int start, int end) {
+		return findByPosition(position, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the employees where position = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param position the position
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching employees
+	 */
+	@Override
+	public List<Employee> findByPosition(
+		int position, int start, int end,
+		OrderByComparator<Employee> orderByComparator) {
+
+		return findByPosition(position, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the employees where position = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param position the position
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching employees
+	 */
+	@Override
+	public List<Employee> findByPosition(
+		int position, int start, int end,
+		OrderByComparator<Employee> orderByComparator, boolean useFinderCache) {
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByPosition;
+				finderArgs = new Object[] {position};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByPosition;
+			finderArgs = new Object[] {position, start, end, orderByComparator};
+		}
+
+		List<Employee> list = null;
+
+		if (useFinderCache) {
+			list = (List<Employee>)finderCache.getResult(
+				finderPath, finderArgs, this);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (Employee employee : list) {
+					if (position != employee.getPosition()) {
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(3);
+			}
+
+			sb.append(_SQL_SELECT_EMPLOYEE_WHERE);
+
+			sb.append(_FINDER_COLUMN_POSITION_POSITION_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(EmployeeModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(position);
+
+				list = (List<Employee>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first employee in the ordered set where position = &#63;.
+	 *
+	 * @param position the position
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee
+	 * @throws NoSuchEmployeeException if a matching employee could not be found
+	 */
+	@Override
+	public Employee findByPosition_First(
+			int position, OrderByComparator<Employee> orderByComparator)
+		throws NoSuchEmployeeException {
+
+		Employee employee = fetchByPosition_First(position, orderByComparator);
+
+		if (employee != null) {
+			return employee;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("position=");
+		sb.append(position);
+
+		sb.append("}");
+
+		throw new NoSuchEmployeeException(sb.toString());
+	}
+
+	/**
+	 * Returns the first employee in the ordered set where position = &#63;.
+	 *
+	 * @param position the position
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	@Override
+	public Employee fetchByPosition_First(
+		int position, OrderByComparator<Employee> orderByComparator) {
+
+		List<Employee> list = findByPosition(position, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last employee in the ordered set where position = &#63;.
+	 *
+	 * @param position the position
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee
+	 * @throws NoSuchEmployeeException if a matching employee could not be found
+	 */
+	@Override
+	public Employee findByPosition_Last(
+			int position, OrderByComparator<Employee> orderByComparator)
+		throws NoSuchEmployeeException {
+
+		Employee employee = fetchByPosition_Last(position, orderByComparator);
+
+		if (employee != null) {
+			return employee;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("position=");
+		sb.append(position);
+
+		sb.append("}");
+
+		throw new NoSuchEmployeeException(sb.toString());
+	}
+
+	/**
+	 * Returns the last employee in the ordered set where position = &#63;.
+	 *
+	 * @param position the position
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	@Override
+	public Employee fetchByPosition_Last(
+		int position, OrderByComparator<Employee> orderByComparator) {
+
+		int count = countByPosition(position);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<Employee> list = findByPosition(
+			position, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the employees before and after the current employee in the ordered set where position = &#63;.
+	 *
+	 * @param employeesId the primary key of the current employee
+	 * @param position the position
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next employee
+	 * @throws NoSuchEmployeeException if a employee with the primary key could not be found
+	 */
+	@Override
+	public Employee[] findByPosition_PrevAndNext(
+			long employeesId, int position,
+			OrderByComparator<Employee> orderByComparator)
+		throws NoSuchEmployeeException {
+
+		Employee employee = findByPrimaryKey(employeesId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Employee[] array = new EmployeeImpl[3];
+
+			array[0] = getByPosition_PrevAndNext(
+				session, employee, position, orderByComparator, true);
+
+			array[1] = employee;
+
+			array[2] = getByPosition_PrevAndNext(
+				session, employee, position, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Employee getByPosition_PrevAndNext(
+		Session session, Employee employee, int position,
+		OrderByComparator<Employee> orderByComparator, boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(3);
+		}
+
+		sb.append(_SQL_SELECT_EMPLOYEE_WHERE);
+
+		sb.append(_FINDER_COLUMN_POSITION_POSITION_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(EmployeeModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		queryPos.add(position);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(employee)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<Employee> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the employees where position = &#63; from the database.
+	 *
+	 * @param position the position
+	 */
+	@Override
+	public void removeByPosition(int position) {
+		for (Employee employee :
+				findByPosition(
+					position, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
+			remove(employee);
+		}
+	}
+
+	/**
+	 * Returns the number of employees where position = &#63;.
+	 *
+	 * @param position the position
+	 * @return the number of matching employees
+	 */
+	@Override
+	public int countByPosition(int position) {
+		FinderPath finderPath = _finderPathCountByPosition;
+
+		Object[] finderArgs = new Object[] {position};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(2);
+
+			sb.append(_SQL_COUNT_EMPLOYEE_WHERE);
+
+			sb.append(_FINDER_COLUMN_POSITION_POSITION_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(position);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_POSITION_POSITION_2 =
+		"employee.position = ?";
+
+	private FinderPath _finderPathWithPaginationFindByBank;
+	private FinderPath _finderPathWithoutPaginationFindByBank;
+	private FinderPath _finderPathCountByBank;
+
+	/**
+	 * Returns all the employees where bank = &#63;.
+	 *
+	 * @param bank the bank
+	 * @return the matching employees
+	 */
+	@Override
+	public List<Employee> findByBank(int bank) {
+		return findByBank(bank, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the employees where bank = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param bank the bank
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @return the range of matching employees
+	 */
+	@Override
+	public List<Employee> findByBank(int bank, int start, int end) {
+		return findByBank(bank, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the employees where bank = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param bank the bank
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching employees
+	 */
+	@Override
+	public List<Employee> findByBank(
+		int bank, int start, int end,
+		OrderByComparator<Employee> orderByComparator) {
+
+		return findByBank(bank, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the employees where bank = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param bank the bank
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching employees
+	 */
+	@Override
+	public List<Employee> findByBank(
+		int bank, int start, int end,
+		OrderByComparator<Employee> orderByComparator, boolean useFinderCache) {
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByBank;
+				finderArgs = new Object[] {bank};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByBank;
+			finderArgs = new Object[] {bank, start, end, orderByComparator};
+		}
+
+		List<Employee> list = null;
+
+		if (useFinderCache) {
+			list = (List<Employee>)finderCache.getResult(
+				finderPath, finderArgs, this);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (Employee employee : list) {
+					if (bank != employee.getBank()) {
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(3);
+			}
+
+			sb.append(_SQL_SELECT_EMPLOYEE_WHERE);
+
+			sb.append(_FINDER_COLUMN_BANK_BANK_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(EmployeeModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(bank);
+
+				list = (List<Employee>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first employee in the ordered set where bank = &#63;.
+	 *
+	 * @param bank the bank
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee
+	 * @throws NoSuchEmployeeException if a matching employee could not be found
+	 */
+	@Override
+	public Employee findByBank_First(
+			int bank, OrderByComparator<Employee> orderByComparator)
+		throws NoSuchEmployeeException {
+
+		Employee employee = fetchByBank_First(bank, orderByComparator);
+
+		if (employee != null) {
+			return employee;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("bank=");
+		sb.append(bank);
+
+		sb.append("}");
+
+		throw new NoSuchEmployeeException(sb.toString());
+	}
+
+	/**
+	 * Returns the first employee in the ordered set where bank = &#63;.
+	 *
+	 * @param bank the bank
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	@Override
+	public Employee fetchByBank_First(
+		int bank, OrderByComparator<Employee> orderByComparator) {
+
+		List<Employee> list = findByBank(bank, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last employee in the ordered set where bank = &#63;.
+	 *
+	 * @param bank the bank
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee
+	 * @throws NoSuchEmployeeException if a matching employee could not be found
+	 */
+	@Override
+	public Employee findByBank_Last(
+			int bank, OrderByComparator<Employee> orderByComparator)
+		throws NoSuchEmployeeException {
+
+		Employee employee = fetchByBank_Last(bank, orderByComparator);
+
+		if (employee != null) {
+			return employee;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("bank=");
+		sb.append(bank);
+
+		sb.append("}");
+
+		throw new NoSuchEmployeeException(sb.toString());
+	}
+
+	/**
+	 * Returns the last employee in the ordered set where bank = &#63;.
+	 *
+	 * @param bank the bank
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	@Override
+	public Employee fetchByBank_Last(
+		int bank, OrderByComparator<Employee> orderByComparator) {
+
+		int count = countByBank(bank);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<Employee> list = findByBank(
+			bank, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the employees before and after the current employee in the ordered set where bank = &#63;.
+	 *
+	 * @param employeesId the primary key of the current employee
+	 * @param bank the bank
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next employee
+	 * @throws NoSuchEmployeeException if a employee with the primary key could not be found
+	 */
+	@Override
+	public Employee[] findByBank_PrevAndNext(
+			long employeesId, int bank,
+			OrderByComparator<Employee> orderByComparator)
+		throws NoSuchEmployeeException {
+
+		Employee employee = findByPrimaryKey(employeesId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Employee[] array = new EmployeeImpl[3];
+
+			array[0] = getByBank_PrevAndNext(
+				session, employee, bank, orderByComparator, true);
+
+			array[1] = employee;
+
+			array[2] = getByBank_PrevAndNext(
+				session, employee, bank, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Employee getByBank_PrevAndNext(
+		Session session, Employee employee, int bank,
+		OrderByComparator<Employee> orderByComparator, boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(3);
+		}
+
+		sb.append(_SQL_SELECT_EMPLOYEE_WHERE);
+
+		sb.append(_FINDER_COLUMN_BANK_BANK_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(EmployeeModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		queryPos.add(bank);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(employee)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<Employee> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the employees where bank = &#63; from the database.
+	 *
+	 * @param bank the bank
+	 */
+	@Override
+	public void removeByBank(int bank) {
+		for (Employee employee :
+				findByBank(bank, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
+			remove(employee);
+		}
+	}
+
+	/**
+	 * Returns the number of employees where bank = &#63;.
+	 *
+	 * @param bank the bank
+	 * @return the number of matching employees
+	 */
+	@Override
+	public int countByBank(int bank) {
+		FinderPath finderPath = _finderPathCountByBank;
+
+		Object[] finderArgs = new Object[] {bank};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(2);
+
+			sb.append(_SQL_COUNT_EMPLOYEE_WHERE);
+
+			sb.append(_FINDER_COLUMN_BANK_BANK_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(bank);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_BANK_BANK_2 =
+		"employee.bank = ?";
+
 	public EmployeePersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -1167,6 +2141,42 @@ public class EmployeePersistenceImpl
 		_finderPathCountByUuid = _createFinderPath(
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
 			new String[] {String.class.getName()}, new String[] {"uuid_"},
+			false);
+
+		_finderPathWithPaginationFindByPosition = _createFinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByPosition",
+			new String[] {
+				Integer.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			},
+			new String[] {"position"}, true);
+
+		_finderPathWithoutPaginationFindByPosition = _createFinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByPosition",
+			new String[] {Integer.class.getName()}, new String[] {"position"},
+			true);
+
+		_finderPathCountByPosition = _createFinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByPosition",
+			new String[] {Integer.class.getName()}, new String[] {"position"},
+			false);
+
+		_finderPathWithPaginationFindByBank = _createFinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByBank",
+			new String[] {
+				Integer.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			},
+			new String[] {"bank"}, true);
+
+		_finderPathWithoutPaginationFindByBank = _createFinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByBank",
+			new String[] {Integer.class.getName()}, new String[] {"bank"},
+			true);
+
+		_finderPathCountByBank = _createFinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByBank",
+			new String[] {Integer.class.getName()}, new String[] {"bank"},
 			false);
 	}
 

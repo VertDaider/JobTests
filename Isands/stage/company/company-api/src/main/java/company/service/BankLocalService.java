@@ -75,9 +75,6 @@ public interface BankLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public Bank addBank(Bank bank);
 
-	public Bank addBank(String name, long bik, String address)
-		throws SystemException;
-
 	/**
 	 * Creates a new bank with the primary key. Does not add the bank to the database.
 	 *
@@ -198,9 +195,6 @@ public interface BankLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List getAllBanks();
 
 	/**
 	 * Returns the bank with the primary key.

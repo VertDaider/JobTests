@@ -193,6 +193,20 @@ public class EmployeePersistenceTest {
 	}
 
 	@Test
+	public void testCountByPosition() throws Exception {
+		_persistence.countByPosition(RandomTestUtil.nextInt());
+
+		_persistence.countByPosition(0);
+	}
+
+	@Test
+	public void testCountByBank() throws Exception {
+		_persistence.countByBank(RandomTestUtil.nextInt());
+
+		_persistence.countByBank(0);
+	}
+
+	@Test
 	public void testFindByPrimaryKeyExisting() throws Exception {
 		Employee newEmployee = addEmployee();
 
