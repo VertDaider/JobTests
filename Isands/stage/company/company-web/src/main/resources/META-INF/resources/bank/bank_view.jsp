@@ -23,6 +23,7 @@
         </portlet:renderURL>
 
         <portlet:actionURL name="deleteBank" var="deleteURL">
+            <portlet:param name="mvcPath" value="/bank/bank_view.jsp"></portlet:param>
             <portlet:param name="bankId" value="<%=String.valueOf(bank.getBankId())%>"/>
         </portlet:actionURL>
 

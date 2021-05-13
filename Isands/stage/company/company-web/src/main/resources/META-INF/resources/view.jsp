@@ -2,22 +2,10 @@
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
-<%@ page import="javax.portlet.PortletURL" %>
-<%@ page import="company.service.PositionLocalServiceUtil" %>
-<%@ page import="javax.portlet.RenderResponse" %>
-
 <liferay-theme:defineObjects/>
-
-<%!
-    RenderRequest renderRequest;
-    RenderResponse renderResponse;
-%>
 
 <portlet:defineObjects/>
 
-<%
-    PortletURL portletURL = renderResponse.createRenderURL();
-%>
 <div>
     <div>
         <h4><liferay-ui:message key="banks.caption"/></h4>
@@ -57,7 +45,6 @@
     </div>
 </div>
 
-
 <div style="clear: both">
     <div>
         <h4><liferay-ui:message key="pos.caption"/></h4>
@@ -76,4 +63,3 @@
         </aui:button-row>
     </div>
 </div>
-

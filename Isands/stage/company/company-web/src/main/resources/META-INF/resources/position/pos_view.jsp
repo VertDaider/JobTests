@@ -6,7 +6,6 @@
     <portlet:param name="mvcPath" value="/view.jsp"></portlet:param>
 </portlet:renderURL>
 
-
 <liferay-ui:search-container total="<%=PositionLocalServiceUtil.getPositionsCount()%>">
     <liferay-ui:search-container-results
             results="<%=PositionLocalServiceUtil.getPositions(0, PositionLocalServiceUtil.getPositionsCount())%>"/>
@@ -18,13 +17,17 @@
             <portlet:param name="mvcPath" value="/position/pos_edit.jsp"></portlet:param>
             <portlet:param name="posId" value="<%=String.valueOf(position.getPositionId())%>"/>
         </portlet:renderURL>
-
         <portlet:actionURL name="deletePos" var="deleteURL">
+            <portlet:param name="mvcPath" value="/position/pos_view.jsp"></portlet:param>
+            <portlet:param name="posId" value="<%=String.valueOf(position.getPositionId())%>"/>
+        </portlet:actionURL>
+        <portlet:actionURL name="editArchivePos" var="editArchiveURL">
+            <portlet:param name="mvcPath" value="/position/pos_view.jsp"></portlet:param>
             <portlet:param name="posId" value="<%=String.valueOf(position.getPositionId())%>"/>
         </portlet:actionURL>
 
         <liferay-ui:search-container-column-text name="Должность" property="name" />
-        <liferay-ui:search-container-column-text name="В архиве" cssClass="text-center">
+        <liferay-ui:search-container-column-text name="В архиве" cssClass="text-center" href="${editArchiveURL}">
             <% if (position.isArchive()) { %>
             <liferay-ui:icon image="checked"/>
             <% } else { %>
@@ -47,4 +50,3 @@
 <aui:button-row>
     <aui:button type="cancel" href="${viewURL}"></aui:button>
 </aui:button-row>
-

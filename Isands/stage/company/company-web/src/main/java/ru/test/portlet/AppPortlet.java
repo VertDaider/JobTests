@@ -33,7 +33,11 @@ import javax.portlet.*;
 import org.osgi.service.component.annotations.Component;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -68,14 +72,14 @@ public class AppPortlet extends MVCPortlet {
         long bik = ParamUtil.getLong(request, "bik");
 
         long bankId = CounterLocalServiceUtil.increment();
-        Bank bank = null;
-        bank = BankLocalServiceUtil.createBank(bankId);
+
+        Bank bank = BankLocalServiceUtil.createBank(bankId);
 
         bank.setBankName(name);
         bank.setBIK(bik);
         bank.setAddress(address);
 
-        bank = BankLocalServiceUtil.addBank(bank);
+        BankLocalServiceUtil.addBank(bank);
 
         if (bank != null) {
             SessionMessages.add((PortletRequest) request.getPortletSession(), "bank-add-success");
@@ -84,13 +88,11 @@ public class AppPortlet extends MVCPortlet {
             SessionErrors.add((PortletRequest) request.getPortletSession(), "bank-add-error");
             _log.error("There is an Error in adding Bank");
         }
-
     }
 
     public void deleteBank(ActionRequest request, ActionResponse response) throws PortalException {
         long bankId = ParamUtil.getLong(request, "bankId");
-
-        Bank bank = BankLocalServiceUtil.deleteBank(bankId);
+        BankLocalServiceUtil.deleteBank(bankId);
     }
 
     public void editBank(ActionRequest request, ActionResponse response) throws PortalException {
@@ -104,7 +106,7 @@ public class AppPortlet extends MVCPortlet {
         bank.setBIK(bik);
         bank.setAddress(address);
 
-        bank = BankLocalServiceUtil.updateBank(bank);
+        BankLocalServiceUtil.updateBank(bank);
     }
 
     public void addPosition(ActionRequest request, ActionResponse response) throws PortalException {
@@ -116,33 +118,31 @@ public class AppPortlet extends MVCPortlet {
 
         long positionId = CounterLocalServiceUtil.increment();
 
-         Position position = PositionLocalServiceUtil.createPosition(positionId);
+        Position position = PositionLocalServiceUtil.createPosition(positionId);
 
         position.setName(name);
         position.setArchive(isArchive);
 
-        position = PositionLocalServiceUtil.addPosition(position);
-
+        PositionLocalServiceUtil.addPosition(position);
     }
 
-    public void deletePos(ActionRequest request, ActionResponse response) throws PortalException  {
+    public void deletePos(ActionRequest request, ActionResponse response) throws PortalException {
         long posId = ParamUtil.getLong(request, "posId");
 
         List list = EmployeeLocalServiceUtil.getEmployees(0, EmployeeLocalServiceUtil.getEmployeesCount());
+
         for (Object employee : list) {
             Employee emp = (Employee) employee;
             if (emp.getPosition() == posId && !emp.isArchive()) {
                 SessionErrors.add((PortletRequest) request.getPortletSession(), "pos-del-error");
                 _log.error("На данной должности работает сотрудник");
             } else {
-                Position position = PositionLocalServiceUtil.deletePosition(posId);
+                PositionLocalServiceUtil.deletePosition(posId);
             }
         }
-
-
     }
 
-    public void editPos (ActionRequest request, ActionResponse response) throws PortalException  {
+    public void editPos(ActionRequest request, ActionResponse response) throws PortalException {
         long posId = ParamUtil.getLong(request, "posId");
 
         String name = ParamUtil.getString(request, "name");
@@ -153,7 +153,110 @@ public class AppPortlet extends MVCPortlet {
         position.setName(name);
         position.setArchive(isArchive);
 
-        position = PositionLocalServiceUtil.updatePosition(position);
+        PositionLocalServiceUtil.updatePosition(position);
     }
 
+    public void addEmployee(ActionRequest request, ActionResponse response) throws PortalException {
+        ServiceContext serviceContext = ServiceContextFactory.getInstance(Employee.class.getName(), request);
+
+        String name = ParamUtil.getString(request, "name");
+        String surname = ParamUtil.getString(request, "surname");
+        String patronymic = ParamUtil.getString(request, "patronymic");
+        String gender;
+        if (ParamUtil.getString(request, "sex").equals("man")) {
+            gender = "мужской";
+        } else {
+            gender = "женский";
+        }
+        SimpleDateFormat df = new SimpleDateFormat("");
+        Date birthDay = ParamUtil.getDate(request, "birthDay", df);
+        int position = ParamUtil.getInteger(request, "position");
+        Date dateOfEmployment = ParamUtil.getDate(request, "dateOfEmployment", df);
+        int salary = ParamUtil.getInteger(request, "salary");
+        int mobilePhone = ParamUtil.getInteger(request, "mobilePhone");
+        int jobPhone = ParamUtil.getInteger(request, "jobPhone");
+        int bank = ParamUtil.getInteger(request, "bank");
+        boolean archive = ParamUtil.getBoolean(request, "archive", false);
+
+        long empId = CounterLocalServiceUtil.increment();
+        Employee employee = EmployeeLocalServiceUtil.createEmployee(empId);
+
+        employee.setName(name);
+        employee.setSurname(surname);
+        employee.setPatronymic(patronymic);
+        employee.setSex(gender);
+        employee.setBirthDay(birthDay);
+        employee.setPosition(position);
+        employee.setDateOfEmployment(dateOfEmployment);
+        employee.setSalary(salary);
+        employee.setMobilePhone(mobilePhone);
+        employee.setJobPhone(jobPhone);
+        employee.setBank(bank);
+        employee.setArchive(!archive);
+
+        EmployeeLocalServiceUtil.addEmployee(employee);
+    }
+
+    public void deleteEmployee (ActionRequest request, ActionResponse response) throws PortalException {
+        long empId = ParamUtil.getLong(request, "employeeId");
+        EmployeeLocalServiceUtil.deleteEmployee(empId);
+    }
+
+    public void editEmployee (ActionRequest request, ActionResponse response) throws PortalException, ParseException {
+        long empId = ParamUtil.getLong(request, "empId");
+
+        String name = ParamUtil.getString(request, "name");
+        String surname = ParamUtil.getString(request, "surname");
+        String patronymic = ParamUtil.getString(request, "patronymic");
+        String gender;
+        if (ParamUtil.getString(request, "sex").equals("man")) {
+            gender = "мужской";
+        } else {
+            gender = "женский";
+        }
+
+        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        String birthDayStr = ParamUtil.getString(request, "birthDay");
+        Date birthDay = df.parse(birthDayStr);
+        String dateOfEmploymentStr = ParamUtil.getString(request, "dateOfEmployment");
+        Date dateOfEmployment = df.parse(dateOfEmploymentStr);
+
+        int position = ParamUtil.getInteger(request, "position");
+        int salary = ParamUtil.getInteger(request, "salary");
+        int mobilePhone = ParamUtil.getInteger(request, "mobilePhone");
+        int jobPhone = ParamUtil.getInteger(request, "jobPhone");
+        int bank = ParamUtil.getInteger(request, "bank");
+        boolean archive = ParamUtil.getBoolean(request, "archive", false);
+
+        Employee employee = EmployeeLocalServiceUtil.getEmployee(empId);
+
+        employee.setName(name);
+        employee.setSurname(surname);
+        employee.setPatronymic(patronymic);
+        employee.setSex(gender);
+        employee.setBirthDay(birthDay);
+        employee.setPosition(position);
+        employee.setDateOfEmployment(dateOfEmployment);
+        employee.setSalary(salary);
+        employee.setMobilePhone(mobilePhone);
+        employee.setJobPhone(jobPhone);
+        employee.setBank(bank);
+        employee.setArchive(!archive);
+
+        EmployeeLocalServiceUtil.updateEmployee(employee);
+    }
+
+    public void editArchiveEmp (ActionRequest request, ActionResponse response) throws PortalException {
+        long empId = ParamUtil.getLong(request, "employeeId");
+        Employee employee = EmployeeLocalServiceUtil.getEmployee(empId);
+        employee.setArchive(!employee.getArchive());
+        EmployeeLocalServiceUtil.updateEmployee(employee);
+    }
+
+    public void editArchivePos (ActionRequest request, ActionResponse response) throws PortalException {
+        long posId = ParamUtil.getLong(request, "posId");
+        Position position = PositionLocalServiceUtil.getPosition(posId);
+        position.setArchive(!position.getArchive());
+        PositionLocalServiceUtil.updatePosition(position);
+    }
 }
