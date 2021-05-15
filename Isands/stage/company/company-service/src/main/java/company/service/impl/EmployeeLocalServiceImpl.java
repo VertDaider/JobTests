@@ -1,11 +1,11 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
- *
+ * <p>
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *
+ * <p>
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
@@ -16,9 +16,13 @@ package company.service.impl;
 
 import com.liferay.portal.aop.AopService;
 
+import company.model.Employee;
 import company.service.base.EmployeeLocalServiceBaseImpl;
 
 import org.osgi.service.component.annotations.Component;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * The implementation of the employee local service.
@@ -34,14 +38,31 @@ import org.osgi.service.component.annotations.Component;
  * @see EmployeeLocalServiceBaseImpl
  */
 @Component(
-	property = "model.class.name=company.model.Employee",
-	service = AopService.class
+        property = "model.class.name=company.model.Employee",
+        service = AopService.class
 )
 public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
-	/*
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this class directly. Use <code>company.service.EmployeeLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>company.service.EmployeeLocalServiceUtil</code>.
-	 */
+    /*
+     * NOTE FOR DEVELOPERS:
+     *
+     * Never reference this class directly. Use <code>company.service.EmployeeLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>company.service.EmployeeLocalServiceUtil</code>.
+     */
+    public java.util.List<company.model.Employee> getEmployees(int start, int end, Date firstDate, Date lastDate) {
+
+        List<Employee> employeeList = getEmployees(start, end);
+
+        if (firstDate != null && lastDate != null) {
+
+            for (int i = 0; i < employeeList.size(); i++) {
+                if (employeeList.get(i).getBirthDay().before(firstDate) || employeeList.get(i).getBirthDay().after(lastDate)) {
+                    employeeList.remove(i);
+                    i--;
+                }
+            }
+        }
+
+        return employeeList;
+    }
+
 }

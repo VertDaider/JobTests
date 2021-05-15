@@ -70,10 +70,6 @@
                            monthValue="<%=toCalendar(employee.getBirthDay()).get(Calendar.MONTH)%>"
                            yearValue="<%=toCalendar(employee.getBirthDay()).get(Calendar.YEAR)%>">
     </liferay-ui:input-date>
-<%--    <aui:input label="Дата рождения" name="birthDay" type="text" cssClass="add"--%>
-<%--               value="<%=toCalendar((employee.getBirthDay()))%>">--%>
-<%--        <aui:validator name="date"></aui:validator>--%>
-<%--    </aui:input>--%>
     <aui:select label="Должность" name="position" cssClass="add">
         <%
             List<Position> list = PositionLocalServiceUtil.getPositions(0, PositionLocalServiceUtil.getPositionsCount());

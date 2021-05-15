@@ -34,6 +34,7 @@ import company.model.Employee;
 
 import java.io.Serializable;
 
+import java.util.Date;
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -219,6 +220,10 @@ public interface EmployeeLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Employee> getEmployees(int start, int end);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Employee> getEmployees(
+		int start, int end, Date firstDate, Date lastDate);
 
 	/**
 	 * Returns the number of employees.

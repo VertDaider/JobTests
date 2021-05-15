@@ -249,6 +249,14 @@ public class EmployeeLocalServiceWrapper
 		return _employeeLocalService.getEmployees(start, end);
 	}
 
+	@Override
+	public java.util.List<company.model.Employee> getEmployees(
+		int start, int end, java.util.Date firstDate, java.util.Date lastDate) {
+
+		return _employeeLocalService.getEmployees(
+			start, end, firstDate, lastDate);
+	}
+
 	/**
 	 * Returns the number of employees.
 	 *

@@ -1,44 +1,31 @@
 package ru.test.portlet;
 
-import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
-import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
-import com.liferay.portal.kernel.util.Constants;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.vulcan.util.ActionUtil;
-
-import company.exception.NoSuchBankException;
 import company.model.Bank;
 import company.model.Employee;
 import company.model.Position;
-import company.service.*;
-import company.service.persistence.BankPersistence;
-import org.osgi.service.component.annotations.Reference;
+import company.service.BankLocalServiceUtil;
+import company.service.EmployeeLocalServiceUtil;
+import company.service.PositionLocalServiceUtil;
+import org.osgi.service.component.annotations.Component;
 import ru.test.constants.AppPortletKeys;
 
-
-import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
-
-import javax.portlet.*;
-
-import org.osgi.service.component.annotations.Component;
-
-import java.io.IOException;
-import java.text.DateFormat;
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.Portlet;
+import javax.portlet.PortletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -81,13 +68,8 @@ public class AppPortlet extends MVCPortlet {
 
         BankLocalServiceUtil.addBank(bank);
 
-        if (bank != null) {
-            SessionMessages.add((PortletRequest) request.getPortletSession(), "bank-add-success");
-            _log.info("Bank have been added successfully");
-        } else {
-            SessionErrors.add((PortletRequest) request.getPortletSession(), "bank-add-error");
-            _log.error("There is an Error in adding Bank");
-        }
+        SessionMessages.add((PortletRequest) request.getPortletSession(), "bank-add-success");
+        _log.info("Bank have been added successfully");
     }
 
     public void deleteBank(ActionRequest request, ActionResponse response) throws PortalException {
@@ -131,6 +113,7 @@ public class AppPortlet extends MVCPortlet {
 
         List list = EmployeeLocalServiceUtil.getEmployees(0, EmployeeLocalServiceUtil.getEmployeesCount());
 
+        // проверяем, работает ли кто-то на удаляемой должности
         for (Object employee : list) {
             Employee emp = (Employee) employee;
             if (emp.getPosition() == posId && !emp.isArchive()) {
@@ -258,5 +241,16 @@ public class AppPortlet extends MVCPortlet {
         Position position = PositionLocalServiceUtil.getPosition(posId);
         position.setArchive(!position.getArchive());
         PositionLocalServiceUtil.updatePosition(position);
+    }
+
+    public void filterEmpBirthDay (ActionRequest request, ActionResponse response) throws PortalException, ParseException {
+        SimpleDateFormat df = new SimpleDateFormat("MM.dd.yyyy");
+
+        String firstDateStr = ParamUtil.getString(request, "firstDate");
+        String lastDateStr = ParamUtil.getString(request, "lastDate");
+        Date firstDate = df.parse(firstDateStr);
+        Date lastDate = df.parse(lastDateStr);
+        request.setAttribute("firstDate", firstDate);
+        request.setAttribute("lastDate", lastDate);
     }
 }

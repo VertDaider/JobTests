@@ -1,42 +1,26 @@
-<%@ page import="company.model.Bank" %>
-<%@ page import="com.liferay.portal.kernel.portlet.PortletURLUtil" %>
-<%@ page import="javax.portlet.PortletURL" %>
-<%@ page import="company.service.persistence.EmployeeUtil" %>
-<%@ page import="company.model.Employee" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="company.model.Position" %>
-<%@ page import="company.service.*" %>
+<%@ page import="company.model.Employee" %>
+<%@ page import="company.service.EmployeeLocalServiceUtil" %>
+<%@ page import="java.util.List" %>
+<%@ page import="company.service.PositionLocalServiceUtil" %>
+<%@ page import="company.service.BankLocalServiceUtil" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="/init.jsp" %>
+<script>
+    <%@include file="/js/datepicker.js" %>
+</script>
 <%
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+    List<Employee> listEmp = EmployeeLocalServiceUtil.getEmployees(0, EmployeeLocalServiceUtil.getEmployeesCount());
 %>
-
-<script>
-    $(function(){
-        var minDate = new Date(new Date().getUTCFullYear()-99, new Date().getMonth(), new Date().getDate());
-        var maxDate = new Date(new Date().getUTCFullYear(), new Date().getMonth(), new Date().getDate());
-        $("#<portlet:namespace/>dob").datepicker({
-            dateFormat: 'dd/mm/yy',
-            changeMonth: true,
-            changeYear: true,
-            yearRange: '-99:+10',
-            minDate: minDate,
-            maxDate: maxDate,
-            gotoCurrent: true
-        }).datepicker('<portlet:namespace/>dob',"0");
-    });
-</script>
 
 <portlet:renderURL var="viewURL">
     <portlet:param name="mvcPath" value="/view.jsp"></portlet:param>
 </portlet:renderURL>
 
-<liferay-ui:search-container total="<%=EmployeeLocalServiceUtil.getEmployeesCount()%>">
-    <liferay-ui:search-container-results
-            results="<%=EmployeeLocalServiceUtil.getEmployees(0, EmployeeLocalServiceUtil.getEmployeesCount())%>"/>
-
+<liferay-ui:search-container total="<%=listEmp.size()%>">
+    <liferay-ui:search-container-results results="<%=listEmp%>"/>
     <liferay-ui:search-container-row className="company.model.Employee" modelVar="employee">
 
         <portlet:renderURL var="editURL">
@@ -67,7 +51,8 @@
         <liferay-ui:search-container-column-text
                 name="Банковская организация"
                 value="<%=BankLocalServiceUtil.getBank(employee.getBank()).getBankName()%>"/>
-        <liferay-ui:search-container-column-text name="Работает / не работает" cssClass="text-center" href="${editArchiveURL}">
+        <liferay-ui:search-container-column-text name="Работает / не работает" cssClass="text-center"
+                                                 href="${editArchiveURL}">
             <% if (!employee.isArchive()) { %>
             <liferay-ui:icon image="checked"/>
             <% } else { %>
@@ -80,19 +65,29 @@
         <liferay-ui:search-container-column-text name="Удалить запись" href="${deleteURL}" cssClass="text-center">
             <liferay-ui:icon image="delete"/>
         </liferay-ui:search-container-column-text>
-
     </liferay-ui:search-container-row>
-
     <liferay-ui:search-iterator/>
-
 </liferay-ui:search-container>
-
-<aui:input type="text" name="dob" label="Фильтр по дате рождения" id="dob" cssClass="add">
-    <aui:validator name="required" />
-    <aui:validator name="date" />
-</aui:input>
 
 <aui:button-row>
     <aui:button type="cancel" href="${viewURL}"></aui:button>
 </aui:button-row>
+
+
+<portlet:renderURL var="applyFilterURL">
+    <portlet:param name="mvcPath" value="/employee/emp_filter.jsp"/>
+</portlet:renderURL>
+<aui:form name="fbd">
+    <aui:row>
+        <aui:input type="text" id="firstDate" name="firstDate" cssClass="date" label="" placeholder="01.01.1990">
+        </aui:input>
+
+        <aui:input
+                type="text" id="lastDate" name="lastDate" cssClass="date" label="" placeholder="01.01.2000">
+        </aui:input>
+    </aui:row>
+    <aui:button-row>
+        <aui:button type="submit" value="Apply" href="${applyFilterURL}"></aui:button>
+    </aui:button-row>
+</aui:form>
 

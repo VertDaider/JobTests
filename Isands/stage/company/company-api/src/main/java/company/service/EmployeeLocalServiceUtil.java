@@ -243,6 +243,12 @@ public class EmployeeLocalServiceUtil {
 		return getService().getEmployees(start, end);
 	}
 
+	public static java.util.List<company.model.Employee> getEmployees(
+		int start, int end, java.util.Date firstDate, java.util.Date lastDate) {
+
+		return getService().getEmployees(start, end, firstDate, lastDate);
+	}
+
 	/**
 	 * Returns the number of employees.
 	 *

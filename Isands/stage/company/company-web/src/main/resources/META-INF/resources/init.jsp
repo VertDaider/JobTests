@@ -6,5 +6,5 @@
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <%@ taglib uri="http://liferay.com/tld/frontend" prefix="liferay-frontend" %>
 <%@ taglib uri="http://liferay.com/tld/security" prefix="liferay-security" %>
-<%@ page import="javax.portlet.RenderRequest" %>
-<style><%@include file="/css/style.css"%></style>
+<style>
+    <%@include file="/css/style.css"%></style>

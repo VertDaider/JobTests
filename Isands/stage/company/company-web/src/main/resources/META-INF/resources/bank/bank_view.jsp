@@ -1,19 +1,21 @@
 <%@ page import="company.service.BankLocalServiceUtil" %>
+<%@ page import="company.model.Bank" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="/init.jsp" %>
 
 <liferay-theme:defineObjects/>
-
 <portlet:defineObjects/>
+<%
+    List<Bank> bankList = BankLocalServiceUtil.getBanks(0, BankLocalServiceUtil.getBanksCount());
+%>
 
 <portlet:renderURL var="viewURL">
     <portlet:param name="mvcPath" value="/view.jsp"></portlet:param>
 </portlet:renderURL>
 
-<liferay-ui:search-container total="<%=BankLocalServiceUtil.getBanksCount()%>">
-    <liferay-ui:search-container-results
-            results="<%=BankLocalServiceUtil.getBanks(0, BankLocalServiceUtil.getBanksCount())%>"/>
-
+<liferay-ui:search-container total="<%=bankList.size()%>">
+    <liferay-ui:search-container-results results="<%=bankList%>"/>
     <liferay-ui:search-container-row
             className="company.model.Bank" modelVar="bank">
 

@@ -1,17 +1,18 @@
 <%@ page import="company.service.PositionLocalServiceUtil" %>
+<%@ page import="company.model.Position" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="/init.jsp" %>
-
+<%
+    List<Position> positionList = PositionLocalServiceUtil.getPositions(0, PositionLocalServiceUtil.getPositionsCount());
+%>
 <portlet:renderURL var="viewURL">
     <portlet:param name="mvcPath" value="/view.jsp"></portlet:param>
 </portlet:renderURL>
 
-<liferay-ui:search-container total="<%=PositionLocalServiceUtil.getPositionsCount()%>">
-    <liferay-ui:search-container-results
-            results="<%=PositionLocalServiceUtil.getPositions(0, PositionLocalServiceUtil.getPositionsCount())%>"/>
-
-    <liferay-ui:search-container-row
-            className="company.model.Position" modelVar="position">
+<liferay-ui:search-container total="<%=positionList.size()%>">
+    <liferay-ui:search-container-results results="<%=positionList%>"/>
+    <liferay-ui:search-container-row className="company.model.Position" modelVar="position">
 
         <portlet:renderURL var="editURL">
             <portlet:param name="mvcPath" value="/position/pos_edit.jsp"></portlet:param>
@@ -26,7 +27,7 @@
             <portlet:param name="posId" value="<%=String.valueOf(position.getPositionId())%>"/>
         </portlet:actionURL>
 
-        <liferay-ui:search-container-column-text name="Должность" property="name" />
+        <liferay-ui:search-container-column-text name="Должность" property="name"/>
         <liferay-ui:search-container-column-text name="В архиве" cssClass="text-center" href="${editArchiveURL}">
             <% if (position.isArchive()) { %>
             <liferay-ui:icon image="checked"/>
@@ -34,7 +35,7 @@
             <liferay-ui:icon image="close"/>
             <% } %>
         </liferay-ui:search-container-column-text>
-        <liferay-ui:search-container-column-text name="Редактировать запись" href="${editURL}" cssClass="text-center" >
+        <liferay-ui:search-container-column-text name="Редактировать запись" href="${editURL}" cssClass="text-center">
             <liferay-ui:icon image="edit"/>
         </liferay-ui:search-container-column-text>
         <liferay-ui:search-container-column-text name="Удалить запись" href="${deleteURL}" cssClass="text-center">
