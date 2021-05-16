@@ -21,6 +21,8 @@ import company.service.base.EmployeeLocalServiceBaseImpl;
 
 import org.osgi.service.component.annotations.Component;
 
+import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
 
@@ -51,18 +53,16 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
     public java.util.List<company.model.Employee> getEmployees(int start, int end, Date firstDate, Date lastDate) {
 
         List<Employee> employeeList = getEmployees(start, end);
+        List<Employee> newList = new ArrayList<>(employeeList);
 
         if (firstDate != null && lastDate != null) {
-
-            for (int i = 0; i < employeeList.size(); i++) {
-                if (employeeList.get(i).getBirthDay().before(firstDate) || employeeList.get(i).getBirthDay().after(lastDate)) {
-                    employeeList.remove(i);
-                    i--;
+            for (Employee employee : employeeList) {
+                if (employee.getBirthDay().before(firstDate) || employee.getBirthDay().after(lastDate)) {
+                    newList.remove(employee);
                 }
             }
-        }
+        } else return employeeList;
 
-        return employeeList;
+        return newList;
     }
-
 }

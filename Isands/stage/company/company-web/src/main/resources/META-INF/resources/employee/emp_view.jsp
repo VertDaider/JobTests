@@ -4,15 +4,22 @@
 <%@ page import="java.util.List" %>
 <%@ page import="company.service.PositionLocalServiceUtil" %>
 <%@ page import="company.service.BankLocalServiceUtil" %>
+<%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
+<%@ page import="java.util.Date" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="/init.jsp" %>
-<script>
+
+<aui:script>
     <%@include file="/js/datepicker.js" %>
-</script>
+</aui:script>
+
 <%
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-    List<Employee> listEmp = EmployeeLocalServiceUtil.getEmployees(0, EmployeeLocalServiceUtil.getEmployeesCount());
+    Date periodFrom = ParamUtil.getDate(request, "periodFrom", sdf, null);
+    Date periodTo = ParamUtil.getDate(request, "periodTo", sdf, null);
+    int empCount = EmployeeLocalServiceUtil.getEmployeesCount();
+    List<Employee> listEmp = EmployeeLocalServiceUtil.getEmployees(0, empCount, periodFrom, periodTo);
 %>
 
 <portlet:renderURL var="viewURL">
@@ -74,20 +81,23 @@
 </aui:button-row>
 
 
-<portlet:renderURL var="applyFilterURL">
-    <portlet:param name="mvcPath" value="/employee/emp_filter.jsp"/>
+<portlet:renderURL var="filterURL">
+    <portlet:param name="mvcPath" value="/employee/emp_view.jsp"/>
 </portlet:renderURL>
-<aui:form name="fbd">
+<c:set var="filterURL" scope="request" value="${filterURL}"/>
+<aui:form action="${filterURL}" cssClass="add">
+    <b>Фильтр по дате рождения</b>
     <aui:row>
-        <aui:input type="text" id="firstDate" name="firstDate" cssClass="date" label="" placeholder="01.01.1990">
+        <aui:input
+                type="text" name="periodFrom" cssClass="datePicker" label="" placeholder="mm.dd.yyyy">
         </aui:input>
 
         <aui:input
-                type="text" id="lastDate" name="lastDate" cssClass="date" label="" placeholder="01.01.2000">
+                type="text" name="periodTo" cssClass="datePicker" label="" placeholder="mm.dd.yyyy">
         </aui:input>
     </aui:row>
     <aui:button-row>
-        <aui:button type="submit" value="Apply" href="${applyFilterURL}"></aui:button>
+        <aui:button type="button" value="Clear" href="${filterURL}"></aui:button>
+        <aui:button type="submit" value="Apply"></aui:button>
     </aui:button-row>
 </aui:form>
-

@@ -7,11 +7,8 @@
 <%@ page import="company.model.Bank" %>
 <%@ page import="company.service.BankLocalServiceUtil" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="com.liferay.portal.kernel.util.CalendarFactoryUtil" %>
 <%@ page import="java.util.Calendar" %>
-<%@ page import="java.text.DateFormat" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="java.text.ParseException" %>
 <%@ include file="/init.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -21,12 +18,6 @@
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 %>
 <%!
-    public static String getDate(Date date) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-        return sdf.format(date);
-
-    }
-
     public static Calendar toCalendar(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -75,7 +66,8 @@
             List<Position> list = PositionLocalServiceUtil.getPositions(0, PositionLocalServiceUtil.getPositionsCount());
             for (Position p : list) {
         %>
-        <aui:option value="<%=p.getPositionId()%>"><%=p.getName()%></aui:option>
+        <aui:option value="<%=p.getPositionId()%>"><%=p.getName()%>
+        </aui:option>
         <%
             }
         %>
@@ -103,7 +95,8 @@
             List<Bank> list = BankLocalServiceUtil.getBanks(0, BankLocalServiceUtil.getBanksCount());
             for (Bank b : list) {
         %>
-        <aui:option value="<%=b.getBankId()%>"><%=b.getBankName()%></aui:option>
+        <aui:option value="<%=b.getBankId()%>"><%=b.getBankName()%>
+        </aui:option>
         <%
             }
         %>

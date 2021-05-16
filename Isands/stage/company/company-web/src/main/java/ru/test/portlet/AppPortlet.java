@@ -111,12 +111,11 @@ public class AppPortlet extends MVCPortlet {
     public void deletePos(ActionRequest request, ActionResponse response) throws PortalException {
         long posId = ParamUtil.getLong(request, "posId");
 
-        List list = EmployeeLocalServiceUtil.getEmployees(0, EmployeeLocalServiceUtil.getEmployeesCount());
+        List<Employee> list = EmployeeLocalServiceUtil.getEmployees(0, EmployeeLocalServiceUtil.getEmployeesCount());
 
         // проверяем, работает ли кто-то на удаляемой должности
-        for (Object employee : list) {
-            Employee emp = (Employee) employee;
-            if (emp.getPosition() == posId && !emp.isArchive()) {
+        for (Employee employee : list) {
+            if (employee.getPosition() == posId && !employee.isArchive()) {
                 SessionErrors.add((PortletRequest) request.getPortletSession(), "pos-del-error");
                 _log.error("На данной должности работает сотрудник");
             } else {
@@ -241,16 +240,5 @@ public class AppPortlet extends MVCPortlet {
         Position position = PositionLocalServiceUtil.getPosition(posId);
         position.setArchive(!position.getArchive());
         PositionLocalServiceUtil.updatePosition(position);
-    }
-
-    public void filterEmpBirthDay (ActionRequest request, ActionResponse response) throws PortalException, ParseException {
-        SimpleDateFormat df = new SimpleDateFormat("MM.dd.yyyy");
-
-        String firstDateStr = ParamUtil.getString(request, "firstDate");
-        String lastDateStr = ParamUtil.getString(request, "lastDate");
-        Date firstDate = df.parse(firstDateStr);
-        Date lastDate = df.parse(lastDateStr);
-        request.setAttribute("firstDate", firstDate);
-        request.setAttribute("lastDate", lastDate);
     }
 }

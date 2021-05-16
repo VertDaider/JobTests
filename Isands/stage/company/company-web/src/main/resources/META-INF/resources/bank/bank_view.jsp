@@ -40,14 +40,9 @@
         </liferay-ui:search-container-column-text>
 
     </liferay-ui:search-container-row>
-
     <liferay-ui:search-iterator/>
-
 </liferay-ui:search-container>
 
 <aui:button-row>
     <aui:button type="cancel" href="${viewURL}"></aui:button>
 </aui:button-row>
-
-
-

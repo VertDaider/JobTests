@@ -3,6 +3,7 @@
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="/init.jsp" %>
+
 <%
     List<Position> positionList = PositionLocalServiceUtil.getPositions(0, PositionLocalServiceUtil.getPositionsCount());
 %>
@@ -43,9 +44,7 @@
         </liferay-ui:search-container-column-text>
 
     </liferay-ui:search-container-row>
-
     <liferay-ui:search-iterator/>
-
 </liferay-ui:search-container>
 
 <aui:button-row>

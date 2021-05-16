@@ -1,10 +1,10 @@
 YUI().use(
     'aui-datepicker',
     'aui-form-validator',
-    function(Y) {
+    function (Y) {
         new Y.DatePicker(
             {
-                trigger: '#<portlet:namespace />firstDate',
+                trigger: '#<portlet:namespace />periodFrom',
                 mask: '%d.%m.%Y',
                 popover: {
                     zIndex: 1
@@ -15,11 +15,10 @@ YUI().use(
                     }
                 }
             }
-
         );
         new Y.DatePicker(
             {
-                trigger: '#<portlet:namespace />lastDate',
+                trigger: '#<portlet:namespace />periodTo',
                 mask: '%d.%m.%Y',
                 popover: {
                     zIndex: 1
