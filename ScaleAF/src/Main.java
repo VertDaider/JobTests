@@ -5,6 +5,7 @@ public class Main {
 
     private static double getMulAdd(double[] arr) {
         if (arr.length > 3) System.out.println("Слишком много аргументов, результат для первых трёх");
+        if (arr.length < 3) throw new IndexOutOfBoundsException();
         return (arr[0] * arr[1]) + arr[2];
     }
 
@@ -32,9 +33,10 @@ public class Main {
                 arr[i - 1] = Double.parseDouble(inputParam[i]);
                 correctNumCount++;
             } catch (NumberFormatException e) {
-                System.out.println("Неверный формат аргумента в позиции: " + (i));
+                System.out.println("Неверный формат аргумента в позиции: " + i);
             }
         }
+        // проверяем все аргументы на корректное значение
         if (correctNumCount == arr.length) isCorrectNum = true;
         return arr;
     }
@@ -49,24 +51,35 @@ public class Main {
 
             String[] inputParam = s.split(" ");
             operand = inputParam[0];
-            double[] inputNum = parseInputLine(inputParam);
-
-            switch (operand) {
-                case "add":
-                    result = getAdd(inputNum);
-                    break;
-                case "mul":
-                    result = getMul(inputNum);
-                    break;
-                case "maa":
-                    result = getMulAdd(inputNum);
-                    break;
-                default:
-                    System.out.println("Неверный формат операции");
-            }
+            result = getResult(inputParam);
         }
 
         System.out.printf("Результат операции %s: %.2f", operand, result);
+    }
+
+    private static double getResult(String[] inputParam) {
+        double[] inputNum = parseInputLine(inputParam);
+        double result = 0;
+        switch (inputParam[0]) {
+            case "add":
+                result = getAdd(inputNum);
+                break;
+            case "mul":
+                result = getMul(inputNum);
+                break;
+            case "maa":
+                try {
+                    result = getMulAdd(inputNum);
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("Слишком мало аргументов для данной операции");
+                    isCorrectNum = false;
+                }
+                break;
+            default:
+                System.out.println("Неверный формат операции");
+                isCorrectNum = false;
+        }
+        return result;
     }
 
     public static void main(String[] args) {
