@@ -1,6 +1,20 @@
+package procedure;
+
+import java.io.FileInputStream;
 import java.util.Scanner;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class Main {
+    static Logger log;
+    static {
+        try(FileInputStream ins = new FileInputStream("src/log4j.properties")){
+            LogManager.getLogManager().readConfiguration(ins);
+            log = Logger.getLogger(Main.class.getName());
+        }catch (Exception ignore){
+            ignore.printStackTrace();
+        }
+    }
     public static boolean isCorrectNum;
 
     private static double getMulAdd(double[] arr) {
@@ -82,7 +96,44 @@ public class Main {
         return result;
     }
 
-    public static void main(String[] args) {
-        runInConsole();
+    private static void displayUsage() {
+        System.out.println("Flags are:");
+        System.out.println("Usage: PROGRAM - | input.txt output.txt");
+        System.out.println("    i/o.txt result write from input.txt and output to the file output.txt");
+        System.out.println("    -  result output on display");
+        System.out.println("    -h or --help: display this message");
     }
+
+    private static void runWriteFile(String inputFile, String outputFile) {
+    }
+
+    public static void main(String[] args) {
+        log.info("Hello!");
+        if (args.length == 0) {
+            System.out.println("please provide parameters and output file name");
+            displayUsage();
+            return;
+        }
+        if (args[0].equals("-h") || args[0].equals("--help")) {
+            displayUsage();
+            return;
+        }
+        if (args.length == 1 && args[0].equals("-")) {
+            runInConsole();
+            return;
+        }
+
+        String inputFile = null;
+        String outputFile = null;
+        if (args.length == 2) {
+            inputFile = args[0];
+            outputFile = args[1];
+        }
+
+        if (inputFile != null && outputFile != null) {
+            runWriteFile(inputFile, outputFile);
+        }
+    }
+
+
 }

@@ -1,0 +1,4 @@
+мая 17, 2021 10:38:29 PM procedure.Main main
+INFO: Hello!
+мая 17, 2021 10:38:56 PM procedure.Main main
+INFO: Hello!
