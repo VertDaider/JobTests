@@ -7,14 +7,16 @@ import java.util.logging.Logger;
 
 public class Main {
     static Logger log;
+
     static {
-        try(FileInputStream ins = new FileInputStream("src/log4j.properties")){
+        try (FileInputStream ins = new FileInputStream("src/log.properties")) {
             LogManager.getLogManager().readConfiguration(ins);
             log = Logger.getLogger(Main.class.getName());
-        }catch (Exception ignore){
+        } catch (Exception ignore) {
             ignore.printStackTrace();
         }
     }
+
     public static boolean isCorrectNum;
 
     private static double getMulAdd(double[] arr) {
@@ -62,7 +64,6 @@ public class Main {
         while (!isCorrectNum) {
             System.out.print("Введите операцию и аргументы: ");
             String s = scanner.nextLine();
-
             String[] inputParam = s.split(" ");
             operand = inputParam[0];
             result = getResult(inputParam);
@@ -104,11 +105,29 @@ public class Main {
         System.out.println("    -h or --help: display this message");
     }
 
-    private static void runWriteFile(String inputFile, String outputFile) {
+    private static void runIOFile(String inputFile, String outputFile) {
+        String operand = null;
+        double result = 0;
+        try (Scanner scanner = new Scanner(new FileInputStream(inputFile))) {
+            while (scanner.hasNext()) {
+                String s = scanner.nextLine();
+                String[] inputParam = s.split(" ");
+                result = getResult(inputParam);
+                operand = inputParam[0];
+            }
+        } catch (Exception e) {
+            log.info("File not found");
+            return;
+        }
+
+        if (isCorrectNum) {
+            System.out.printf("Результат операции %s: %.2f", operand, result);
+        } else {
+            System.out.println("Результат не получен, проверьте правильность данных в файле");
+        }
     }
 
     public static void main(String[] args) {
-        log.info("Hello!");
         if (args.length == 0) {
             System.out.println("please provide parameters and output file name");
             displayUsage();
@@ -131,7 +150,7 @@ public class Main {
         }
 
         if (inputFile != null && outputFile != null) {
-            runWriteFile(inputFile, outputFile);
+            runIOFile(inputFile, outputFile);
         }
     }
 

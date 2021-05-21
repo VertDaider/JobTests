@@ -1,4 +1,19 @@
-мая 17, 2021 10:38:29 PM procedure.Main main
+[2021-05-19 11:48:25] [INFO   ] Hello!
+[2021-05-19 11:57:27] [INFO   ] [procedure.Main] Hello! 
+"мая 19, 2021 11:57:50 AM procedure.Main main
 INFO: Hello!
-мая 17, 2021 10:38:56 PM procedure.Main main
+[2021-05-19 11:58:21] [INFO   ] Hello! 
+[2021-05-19 12:00:45] [INFO   ] Hello! 
+[2021-05-19 12:00:51] [INFO   ] Hello! 
+2021-05-19 12:01:43 INFO procedure.Main main Hello!
+2021-05-19 12:02:19 INFO procedure.Main main Hello!
+мая 19, 2021 12:03:44 PM procedure.Main main
 INFO: Hello!
+мая 19, 2021 12:06:07 PM procedure.Main main
+INFO: Hello!
+[2021-05-19 12:07:15] [INFO   ] Hello!
+ [19.05.2021 12:09:30] [INFO   ] Hello!
+ [19.05.2021 18:57:52] [INFO   ] Hello!
+ [21.05.2021 19:07:24] [INFO   ] File not found
+ [21.05.2021 19:08:01] [INFO   ] File not found
+ 
